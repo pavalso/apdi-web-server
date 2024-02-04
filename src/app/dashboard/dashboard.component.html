@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Directory listing</title>
+    <style>
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .content {
+            width: 100%;
+            margin: 40px;
+        }
+
+        h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        
+        ul {
+            padding: 0;
+        }
+        
+        li {
+            margin-bottom: 10px;
+        }
+        
+        a {
+            color: #337ab7;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        hr {
+            border: none;
+            border-top: 1px solid #ccc;
+            margin: 20px 0;
+        }
+        
+        p {
+            font-size: 26px;
+            color: #777;
+        }
+
+        button {
+            font-size: 20px;
+            margin-right: 10px;
+        }
+
+        button:hover {
+            cursor: pointer;
+        }
+
+        button:active {
+            background-color: #337ab7;
+            color: white;
+        }
+
+        button:focus {
+            outline: none;
+        }
+
+        button:active:hover {
+            background-color: #286090;
+        }
+
+        li button {
+            margin-left: 10px;
+        }
+
+                /* Estilo base para el input file */
+                .input-file {
+          position: relative;
+          overflow: hidden;
+          display: inline-block;
+          cursor: pointer;
+          padding: 10px 15px;
+          border: 1px solid #ccc;
+          font-family: Arial, sans-serif;
+          font-size: 16px;
+        }
+
+        /* Estilo para el texto dentro del input file */
+        .input-file-label {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          max-width: 100%;
+        }
+
+        /* Estilo para el input real de tipo file */
+        .input-file input[type="file"] {
+          position: absolute;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          left: 0;
+          opacity: 0;
+          cursor: pointer;
+        }
+
+        /* Estilo para cuando se pasa el mouse sobre el input file */
+        .input-file:hover {
+          background-color: #e0e0e0;
+        }
+
+        .form {
+            margin-top: 20px;
+            display: flex;
+        }
+
+        .form button {
+            margin-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="content">
+            <h1>{{username}}'s blobs</h1>
+            <button (click)="refresh()">Refresh</button>
+            <button (click)="logout()">Logout</button>  
+            <hr>
+            <span style="font-size: 26px;">Upload a new blob</span>
+            <div class="form">
+                <label class="input-file">
+                    <span class="input-file	label">{{(file && file.name) || "Choose file..."}}</span>
+                    <input type="file" (change)="onFileChange($event)" />
+                </label>
+                <button (click)="upload()">Upload</button>
+            </div>
+            <span class="new-blob" *ngIf="newBlob">Blob uploaded successfully! {{newBlob.blobId}}</span>
+            <hr>
+            <span style="font-size: 26px;">Get a blob by its ID</span>
+            <div class="form">
+                <input type="text" [(ngModel)]="blobId" placeholder="Blob ID" />
+                <button (click)="download(getBlob(blobId))">Get</button>
+            </div>
+            <hr>
+                <ul>
+                    <li *ngFor="let blob of blobs">
+                        <a id="{{blob.blobId}}" (click)="download(blob)">{{blob.blobId}}</a>
+                        <button id="{{blob.blobId}}" (click)="delete(blob)">Delete</button>
+                        <button id="{{blob.blobId}}" (click)="changeVisibility(blob)">{{blob.visibility}}</button>
+                        <span></span>
+                    </li>
+                </ul>
+            <hr>
+        </div>
+    </div>
+</body>
+</html>
